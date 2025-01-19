@@ -1,0 +1,6 @@
+.DS_Store
+.conda
+.env
+.venv
+screenshots/
+videos/
