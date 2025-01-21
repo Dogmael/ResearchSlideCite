@@ -4,3 +4,5 @@
 .venv
 *.jpg
 *.mp4
+*.pdf
+*.xlsx
