@@ -1,4 +1,10 @@
+matplotlib
+numpy
+opencv-python
+openpyxl
 pandas
-scholarly
+PIL
+pytesseract
+pytubefix
 requests
-openpyxl 
+scholarly
