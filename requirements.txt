@@ -3,7 +3,7 @@ numpy
 opencv-python
 openpyxl
 pandas
-PIL
+Pillow
 pytesseract
 pytubefix
 requests
