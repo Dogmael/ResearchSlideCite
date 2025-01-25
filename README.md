@@ -1,39 +1,26 @@
-# Extracting Papers References from YouTube Videos of Lectures from Collège de France
+# Extraction and Downloading of Articles Cited in the Collège de France YouTube Course Videos
 
-## Process
+This repository provides tools and a workflow to extract and process article references cited in Collège de France YouTube course videos and download them.
 
-### 1. Vidéos to Relevant Screenshots:
-- **Download Videos**: Use `pytubefix` to download lecture videos.
-- **Capture Screenshots**: Extract screenshots of relevant parts of the videos (specifically, the bottom of the screen where references appear) at 30-second intervals using `cv2`.
-- **Filter Screenshots**:
-  - Remove images without text and move them to the "unrelevant" folder.
-  - Detect and flag duplicate images by comparing text similarity:
-    - If the text in two images has more than 90% similarity, mark them as duplicates.
-    - Ensure distinct files are not mistakenly marked as duplicates.
-  - Move non-duplicate images to the "screenshots_clean" folder for further processing.
-- **Final Manual Sorting**: Perform a manual check to ensure accuracy.
-- **Export**: Save non-duplicate and relevant images in the "relevant_screenshots" folder.
+## Workflow Overview
 
-### 2. Relevant Screenshots to OCR Results:
-- **Image Preprocessing**: Use `cv2` and `PIL` to preprocess images for optimal OCR performance.
-- **Text Extraction**: Utilize the Google Vision API to extract text from the processed images.
-- **Save Results**: Store the extracted text in a JSON file.
-- **Manual Cleaning**:
-  - Review and clean OCR results.
-  - Handle cases where multiple references are combined in one entry by splitting them appropriately.
-
-### 3. OCR Results Clean to References:
-- **Build a Reference Sheet**: Create a structured sheet containing:
-  - Course number
-  - Extracted references
-  - URL of the video with timestamps
-
-### 4. References to DOIs:
-- **Retrieve Article Information**:
-  - Use Google Scholar to extract metadata, such as author, year, and title.
-- **Find DOI**:
-  - Query Crossref with the metadata to obtain the DOI for each reference.
-
-### 5. DOIs to PDFs:
-- **Download Articles**:
-  - Use Sci-Hub to download the PDF version of the articles corresponding to the DOIs.
+### 1. Videos to Relevant Screenshots
+- Download videos using `pytubefix`.
+- Take screenshots of the relevant part of videos (bottom of the screen where are the references) every 30 seconds using `cv2`.
+- Identify images without text using `pytesseract` and move them to the "unrelevant" folder.
+- Preprocess the images using `cv2` and `PIL` : resize, sharpen, increase contrast, convert to grayscale, invert colors, apply morphological "opening" operation.
+- Read the text in the images using `pytesseract`, if they have more than 90% similarity, we consider it a duplicate. We make sure to never mark two distinct files as duplicates.
+- Move non-duplicate images to "screenshots_clean" folder.
+- Do the final cleaning manually.
+- Export non-duplicate images to "relevant_screenshots" folder.
+### 2. Relevant screenshots to OCR results
+- Preprocess the images using `cv2` and `PIL` (parameters could be different from the ones used in the previous step).
+- Extract text from images using `Google Vision API`.
+- Save the results in a JSON file.
+- Manually clean the OCR results some references are "two in one" and we need to split them.
+### 3. OCR results clean to references
+- Build a sheet with course number, references, URL of the video with timestamp.
+### 4. References to DOIs
+- Get article information from Google Scholar (author, year, title) and then use Crossref to get the DOI with those informations
+### 5. DOIs to PDFs
+- Download PDF of the article from sci-hub.
