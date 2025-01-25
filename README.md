@@ -2,20 +2,38 @@
 
 ## Process
 
-1 : **Vidéos to relevant screenshots : **
-    - Download videos using `pytubefix`.
-    - Take screenshots of the relevant part of videos (bottom of the screen where are the references) every 30 seconds using `cv2`.
-    - Remove images without text and moving them to "unrelevant" folder.
-    - Read text from images and flag duplicates : 
-        - We read the text in the images, if they have more than 90% similarity, we consider it a duplicate. We make sure to never mark two distinct files as duplicates.
-        - We move non-duplicate images to "screenshots_clean" folder.
-        - We do the final sorting manually.
-    - Export non-duplicate images to "relevant_screenshots" folder.
-2. **Relevant screenshots to OCR results : **
-    - Preprocess the images using `cv2` and `PIL`.
-    - Extract text from images using Google Vision API.
-    - Save the results in a JSON file.
-    - Manually clean the OCR results : some references are "two in one" and we need to split them.
-3. **OCR results clean to references : ** Build a sheet with course number, references, URL of the video with timestamp.
-4. **References to DOIs : ** Get article information from Google Scholar (author, year, title) and then use Crossref to get the DOI with those informations
-5. **DOIs to PDFs : ** Download PDF of the article from sci-hub.
+### 1. Vidéos to Relevant Screenshots:
+- **Download Videos**: Use `pytubefix` to download lecture videos.
+- **Capture Screenshots**: Extract screenshots of relevant parts of the videos (specifically, the bottom of the screen where references appear) at 30-second intervals using `cv2`.
+- **Filter Screenshots**:
+  - Remove images without text and move them to the "unrelevant" folder.
+  - Detect and flag duplicate images by comparing text similarity:
+    - If the text in two images has more than 90% similarity, mark them as duplicates.
+    - Ensure distinct files are not mistakenly marked as duplicates.
+  - Move non-duplicate images to the "screenshots_clean" folder for further processing.
+- **Final Manual Sorting**: Perform a manual check to ensure accuracy.
+- **Export**: Save non-duplicate and relevant images in the "relevant_screenshots" folder.
+
+### 2. Relevant Screenshots to OCR Results:
+- **Image Preprocessing**: Use `cv2` and `PIL` to preprocess images for optimal OCR performance.
+- **Text Extraction**: Utilize the Google Vision API to extract text from the processed images.
+- **Save Results**: Store the extracted text in a JSON file.
+- **Manual Cleaning**:
+  - Review and clean OCR results.
+  - Handle cases where multiple references are combined in one entry by splitting them appropriately.
+
+### 3. OCR Results Clean to References:
+- **Build a Reference Sheet**: Create a structured sheet containing:
+  - Course number
+  - Extracted references
+  - URL of the video with timestamps
+
+### 4. References to DOIs:
+- **Retrieve Article Information**:
+  - Use Google Scholar to extract metadata, such as author, year, and title.
+- **Find DOI**:
+  - Query Crossref with the metadata to obtain the DOI for each reference.
+
+### 5. DOIs to PDFs:
+- **Download Articles**:
+  - Use Sci-Hub to download the PDF version of the articles corresponding to the DOIs.
